@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "176790922353",
+    "project_id": "satnusa",
+    "storage_bucket": "satnusa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176790922353:android:46af902fdcb8f7c564a7d0",
+        "android_client_info": {
+          "package_name": "com.example.satnusa_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAB0myrfMhCFPCW6yZ8aHLljicryOeurA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
