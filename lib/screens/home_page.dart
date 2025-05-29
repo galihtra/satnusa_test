@@ -3,9 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:satnusa_test/constants/colors.dart';
 import 'package:satnusa_test/screens/course_create_screen.dart';
+import 'package:satnusa_test/screens/course_detail_screen.dart';
 import 'package:satnusa_test/screens/courses_screen.dart';
 import '../constants/images.dart';
 import '../constants/text_style.dart';
+import '../providers/course_provider.dart';
 import '../providers/date_provider.dart';
 import '../widgets/card_course.dart';
 import '../widgets/card_topic_category.dart';
@@ -25,6 +27,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     final dateProvider = Provider.of<DateProvider>(context, listen: false);
     dateProvider.fetchCurrentDate();
+
+    Future.microtask(() =>
+      Provider.of<CourseProvider>(context, listen: false).fetchCourses());
   }
 
   @override
@@ -183,32 +188,47 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 12),
               SizedBox(
-                height: 240,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: const [
-                    SizedBox(width: 16),
-                    CardCourse(
-                      image: MyImages.banner,
-                      title:
-                          'Pelatihan K3 dan Identifikasi Bahaya di Tempat Kerja',
-                      description:
-                          'Pelatihan ini bertujuan untuk memberikan pemahaman dasar me...',
-                      progress: 0.1,
-                    ),
-                    SizedBox(width: 12),
-                    CardCourse(
-                      image: MyImages.banner,
-                      title:
-                          'Implementasi Quality Control dan Quality Assurance',
-                      description:
-                          'Pelatihan ini bertujuan untuk memberikan pemahaman dasar me...',
-                      progress: 0.6,
-                    ),
-                    SizedBox(width: 16),
-                  ],
+  height: 240,
+  child: Consumer<CourseProvider>(
+    builder: (context, courseProvider, _) {
+      final courses = courseProvider.courses;
+      if (courses.isEmpty) {
+        return const Center(child: Text('No courses available'));
+      }
+
+      return ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: courses.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 12),
+        itemBuilder: (context, index) {
+          final course = courses[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CourseDetailScreen(course: course),
                 ),
-              ),
+              );
+            },
+            child: CardCourse(
+              image: course.courseImageUrl,
+              title: course.title,
+              description: course.description,
+              progress: course.materials.isNotEmpty
+                  ? course.materials
+                          .where((m) => m.progress >= 1.0)
+                          .length /
+                      course.materials.length
+                  : 0.0,
+            ),
+          );
+        },
+      );
+    },
+  ),
+),
+
             ],
           ),
         ),

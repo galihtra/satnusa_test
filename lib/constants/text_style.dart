@@ -15,6 +15,12 @@ class AppTextStyle {
     fontWeight: FontWeight.bold,
     color: AppColors.text,
   );
+  static const label = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.text,
+  );
 
   static const headingThird = TextStyle(
     fontFamily: 'Roboto',

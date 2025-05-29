@@ -36,14 +36,25 @@ class CardCourse extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              image,
-              width: double.infinity,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                image,
+                width: double.infinity,
+                height: 100,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  height: 100,
+                  color: Colors.grey.shade200,
+                  child: const Center(child: Icon(Icons.broken_image)),
+                ),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return SizedBox(
+                    height: 100,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              )),
           const SizedBox(height: 8),
           Text(title,
               maxLines: 2,
