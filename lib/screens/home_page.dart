@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:satnusa_test/constants/colors.dart';
+import 'package:satnusa_test/screens/course_create_screen.dart';
 import '../constants/images.dart';
 import '../constants/text_style.dart';
 import '../providers/date_provider.dart';
 import '../widgets/card_course.dart';
 import '../widgets/card_topic_category.dart';
 import '../widgets/card_training_progress.dart';
+import 'course_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -154,7 +156,13 @@ class _HomePageState extends State<HomePage> {
                       minimumSize: const Size(0, 0),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CourseCreateScreen()),
+                      );
+                    },
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16.0,

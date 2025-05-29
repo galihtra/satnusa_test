@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../screens/homepage.dart';
+import '../screens/course_create_screen.dart';
+import '../screens/home_page.dart';
 
 class SatnusaApp extends StatelessWidget {
   const SatnusaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'QHSE Training',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      routes: {
+        '/create': (context) => const CourseCreateScreen(),
+      },
+      home: const HomePage(),
     );
   }
 }
