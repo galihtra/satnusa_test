@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:satnusa_test/constants/colors.dart';
 import 'package:satnusa_test/screens/course_create_screen.dart';
+import 'package:satnusa_test/screens/courses_screen.dart';
 import '../constants/images.dart';
 import '../constants/text_style.dart';
 import '../providers/date_provider.dart';
@@ -160,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CourseCreateScreen()),
+                            builder: (context) => const CoursesScreen()),
                       );
                     },
                     child: const Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:satnusa_test/screens/quiz_form_screen.dart';
 import '../models/course.dart';
 import '../models/material.dart';
 import '../models/quiz.dart';
@@ -42,7 +43,8 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -87,7 +89,8 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
     );
 
     try {
-      await Provider.of<CourseProvider>(context, listen: false).addCourse(course);
+      await Provider.of<CourseProvider>(context, listen: false)
+          .addCourse(course);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Course created successfully!')),
       );
@@ -138,7 +141,8 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
                   Expanded(
                     child: TextFormField(
                       controller: _startDateController,
-                      decoration: const InputDecoration(labelText: 'Start Date'),
+                      decoration:
+                          const InputDecoration(labelText: 'Start Date'),
                       readOnly: true,
                       onTap: () => _selectDate(context, _startDateController),
                       validator: (value) {
@@ -168,7 +172,8 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
               ),
               TextFormField(
                 controller: _courseImageUrlController,
-                decoration: const InputDecoration(labelText: 'Course Image URL'),
+                decoration:
+                    const InputDecoration(labelText: 'Course Image URL'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter an image URL';
@@ -177,7 +182,8 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              const Text('Trainer Information', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Trainer Information',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _trainerNameController,
                 decoration: const InputDecoration(labelText: 'Trainer Name'),
@@ -200,7 +206,8 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
               ),
               TextFormField(
                 controller: _trainerImageUrlController,
-                decoration: const InputDecoration(labelText: 'Trainer Image URL'),
+                decoration:
+                    const InputDecoration(labelText: 'Trainer Image URL'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter trainer image URL';
@@ -209,35 +216,36 @@ class _CourseCreateScreenState extends State<CourseCreateScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              const Text('Course Materials', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Course Materials',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               MaterialForm(onAddMaterial: _addMaterial),
               ..._materials.map((material) => ListTile(
-                title: Text(material.title),
-                subtitle: Text(material.youtubeUrl),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    setState(() {
-                      _materials.remove(material);
-                    });
-                  },
-                ),
-              )),
+                    title: Text(material.title),
+                    subtitle: Text(material.youtubeUrl),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          _materials.remove(material);
+                        });
+                      },
+                    ),
+                  )),
               const SizedBox(height: 16),
-              const Text('Quizzes', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              QuizForm(onAddQuiz: _addQuiz),
-              ..._quizzes.map((quiz) => ListTile(
-                title: Text(quiz.title),
-                subtitle: Text('${quiz.questions.length} questions'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    setState(() {
-                      _quizzes.remove(quiz);
-                    });
-                  },
-                ),
-              )),
+              const Text('Quizzes',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ElevatedButton(
+                onPressed: () async {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const QuizFormScreen()),
+                  );
+                  if (result != null && result is Quiz) {
+                    _addQuiz(result);
+                  }
+                },
+                child: const Text('Add New Quiz'),
+              ),
               const SizedBox(height: 32),
               Center(
                 child: ElevatedButton(
