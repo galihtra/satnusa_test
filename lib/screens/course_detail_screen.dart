@@ -8,6 +8,7 @@ import '../models/material.dart';
 import '../models/quiz.dart';
 import '../utils/format_date.dart';
 import '../widgets/material_tile.dart';
+import 'course/quiz_page.dart';
 import 'course/video_detail_page.dart';
 
 class CourseDetailScreen extends StatefulWidget {
@@ -252,8 +253,19 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
                 color: quiz.score! >= 50 ? Colors.green : Colors.red,
               )
             : const Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: () {
-          // TODO: Implement quiz navigation
+        onTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => QuizPage(quiz: quiz),
+            ),
+          );
+
+          if (result is int) {
+            setState(() {
+              quiz.score = result;
+            });
+          }
         },
       ),
     );

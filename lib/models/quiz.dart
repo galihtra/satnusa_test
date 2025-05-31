@@ -3,7 +3,7 @@ import 'package:satnusa_test/models/question.dart';
 class Quiz {
   final String title;
   final List<Question> questions;
-  final int? score;
+   int? score;
 
   Quiz({
     required this.title,

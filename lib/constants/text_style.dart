@@ -71,6 +71,13 @@ class AppTextStyle {
     color: AppColors.grey,
   );
 
+  static const alert = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+    color: AppColors.text,
+  );
+
   static const title = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 12,
