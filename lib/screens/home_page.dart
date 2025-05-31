@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:satnusa_test/constants/colors.dart';
-import 'package:satnusa_test/screens/course_create_screen.dart';
+import 'package:satnusa_test/screens/category/environment_screen.dart';
+import 'package:satnusa_test/screens/category/healty_screen.dart';
+import 'package:satnusa_test/screens/category/quality_screen.dart';
+import 'package:satnusa_test/screens/category/safety_screen.dart';
 import 'package:satnusa_test/screens/course_detail_screen.dart';
 import 'package:satnusa_test/screens/courses_screen.dart';
 import '../constants/images.dart';
@@ -12,7 +15,6 @@ import '../providers/date_provider.dart';
 import '../widgets/card_course.dart';
 import '../widgets/card_topic_category.dart';
 import '../widgets/card_training_progress.dart';
-import 'course_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,7 +31,7 @@ class _HomePageState extends State<HomePage> {
     dateProvider.fetchCurrentDate();
 
     Future.microtask(() =>
-      Provider.of<CourseProvider>(context, listen: false).fetchCourses());
+        Provider.of<CourseProvider>(context, listen: false).fetchCourses());
   }
 
   @override
@@ -138,15 +140,53 @@ class _HomePageState extends State<HomePage> {
                 style: AppTextStyle.headingSecond,
               ),
               const SizedBox(height: 12),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CardTopicCategory(
-                      iconPath: MyIcons.quality, label: 'Quality'),
-                  CardTopicCategory(iconPath: MyIcons.health, label: 'Healthy'),
-                  CardTopicCategory(iconPath: MyIcons.safety, label: 'Safety'),
+                    iconPath: MyIcons.quality,
+                    label: 'Quality',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const QualityScreen()),
+                      );
+                    },
+                  ),
                   CardTopicCategory(
-                      iconPath: MyIcons.environment, label: 'Environment'),
+                    iconPath: MyIcons.health,
+                    label: 'Healthy',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const HealtyScreen()),
+                      );
+                    },
+                  ),
+                  CardTopicCategory(
+                    iconPath: MyIcons.safety,
+                    label: 'Safety',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SafetyScreen()),
+                      );
+                    },
+                  ),
+                  CardTopicCategory(
+                    iconPath: MyIcons.environment,
+                    label: 'Environment',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EnvironmentScreen()),
+                      );
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
@@ -188,47 +228,47 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 12),
               SizedBox(
-  height: 240,
-  child: Consumer<CourseProvider>(
-    builder: (context, courseProvider, _) {
-      final courses = courseProvider.courses;
-      if (courses.isEmpty) {
-        return const Center(child: Text('No courses available'));
-      }
+                height: 240,
+                child: Consumer<CourseProvider>(
+                  builder: (context, courseProvider, _) {
+                    final courses = courseProvider.courses;
+                    if (courses.isEmpty) {
+                      return const Center(child: Text('No courses available'));
+                    }
 
-      return ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: courses.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          final course = courses[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CourseDetailScreen(course: course),
+                    return ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: courses.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 12),
+                      itemBuilder: (context, index) {
+                        final course = courses[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    CourseDetailScreen(course: course),
+                              ),
+                            );
+                          },
+                          child: CardCourse(
+                            image: course.courseImageUrl,
+                            title: course.title,
+                            description: course.description,
+                            progress: course.materials.isNotEmpty
+                                ? course.materials
+                                        .where((m) => m.progress >= 1.0)
+                                        .length /
+                                    course.materials.length
+                                : 0.0,
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
-              );
-            },
-            child: CardCourse(
-              image: course.courseImageUrl,
-              title: course.title,
-              description: course.description,
-              progress: course.materials.isNotEmpty
-                  ? course.materials
-                          .where((m) => m.progress >= 1.0)
-                          .length /
-                      course.materials.length
-                  : 0.0,
-            ),
-          );
-        },
-      );
-    },
-  ),
-),
-
+              ),
             ],
           ),
         ),
