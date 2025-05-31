@@ -8,4 +8,6 @@ class MyIcons {
   static const String safety = "assets/icons/ic_safety.svg";
   static const String warning = "assets/icons/ic_warning.svg";
   static const String quality = "assets/icons/ic_quality.svg";
+  static const String quiz = "assets/icons/ic_quiz.svg";
+  static const String play = "assets/icons/ic_play.svg";
 }

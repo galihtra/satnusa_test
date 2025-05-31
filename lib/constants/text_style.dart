@@ -9,6 +9,34 @@ class AppTextStyle {
     color: AppColors.grey,
   );
 
+  static const headingBlack = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: AppColors.text,
+  );
+
+  static const headingMedium = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: AppColors.text,
+  );
+
+  static const ya = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+
+  static const tidak = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: AppColors.primary,
+  );
+
   static const headingSecond = TextStyle(
     fontFamily: 'Roboto',
     fontSize: 16,
