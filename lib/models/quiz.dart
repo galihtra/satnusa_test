@@ -3,12 +3,12 @@ import 'package:satnusa_test/models/question.dart';
 class Quiz {
   final String title;
   final List<Question> questions;
-  int score; // Non-final but always initialized
+  int score; 
 
   Quiz({
     required this.title,
     required this.questions,
-    this.score = 0, // Default value set to 0
+    this.score = 0, 
   });
 
   
@@ -26,7 +26,7 @@ class Quiz {
       questions: List<Question>.from(
         (map['questions'] ?? []).map((x) => Question.fromMap(x)),
       ),
-      score: (map['score'] ?? 0).toInt(), // Ensure it's always an int
+      score: (map['score'] ?? 0).toInt(), 
     );
   }
 

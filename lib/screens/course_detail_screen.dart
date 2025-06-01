@@ -239,7 +239,16 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
   }
 
   Widget _buildQuizTile(Quiz quiz) {
-    final isCompleted = quiz.score > 0; // Check if score is greater than 0
+    final isCompleted = quiz.score > 0; 
+
+   
+    final Color statusColor;
+    if (isCompleted) {
+      statusColor = quiz.score >= 90 ? Colors.green : AppColors.primary;
+    } else {
+      statusColor = Colors.grey;
+    }
+
     return Card(
       margin: EdgeInsets.zero,
       elevation: 0,
@@ -251,38 +260,31 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         title: Text(quiz.title, style: AppTextStyle.title),
         subtitle: Text(
           isCompleted ? 'Nilai: ${quiz.score}' : 'Belum dikerjakan',
-          style: TextStyle(
-            color: isCompleted
-                ? (quiz.score >= 50 ? Colors.green : Colors.red)
-                : Colors.grey,
-          ),
+          style: TextStyle(color: statusColor),
         ),
         trailing: isCompleted
-            ? Icon(
-                Icons.check_circle,
-                color: quiz.score >= 50 ? Colors.green : Colors.red,
-              )
+            ? Icon(Icons.check_circle, color: statusColor)
             : const Icon(Icons.arrow_forward_ios, size: 16),
-        // Di dalam _buildQuizTile:
-        onTap: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => QuizPage(quiz: quiz),
-            ),
-          );
+        onTap: isCompleted
+            ? null 
+            : () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => QuizPage(quiz: quiz),
+                  ),
+                );
 
-          if (result != null && result is Quiz) {
-            setState(() {
-              // Update quiz di list course
-              final index = widget.course.quizzes
-                  .indexWhere((q) => q.title == result.title);
-              if (index != -1) {
-                widget.course.quizzes[index] = result;
-              }
-            });
-          }
-        },
+                if (result != null && result is Quiz) {
+                  setState(() {
+                    final index = widget.course.quizzes
+                        .indexWhere((q) => q.title == result.title);
+                    if (index != -1) {
+                      widget.course.quizzes[index] = result;
+                    }
+                  });
+                }
+              },
       ),
     );
   }

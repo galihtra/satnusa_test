@@ -39,22 +39,19 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
-  // Buat quiz baru dengan score terupdate
   final updatedQuiz = widget.quiz.copyWith(score: calculatedScore);
 
   try {
-    // Simpan ke Firestore dengan merge
     await FirebaseFirestore.instance
         .collection('quizzes')
         .doc(updatedQuiz.title)
         .set(updatedQuiz.toMap(), SetOptions(merge: true));
 
-    // Navigasi dengan membawa QUIZ BARU
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (_) => QuizResultPage(
-          quiz: updatedQuiz, // Gunakan updatedQuiz bukan widget.quiz
+          quiz: updatedQuiz, 
           remainingAttempts: 2 - _attempts,
           onRetry: _attempts < 2 ? _resetQuiz : null,
         ),
@@ -72,7 +69,7 @@ class _QuizPageState extends State<QuizPage> {
     return WillPopScope(
       onWillPop: () async {
         _showExitConfirmation(context);
-        return false; // cegah langsung keluar
+        return false; 
       },
       child: Scaffold(
         appBar: AppBar(
@@ -217,8 +214,8 @@ class _QuizPageState extends State<QuizPage> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context); // tutup bottom sheet
-                        Navigator.pop(context); // keluar dari quiz
+                        Navigator.pop(context); 
+                        Navigator.pop(context);
                       },
                       child: const Padding(
                         padding: EdgeInsets.all(12.0),

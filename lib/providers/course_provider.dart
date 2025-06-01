@@ -22,16 +22,12 @@ class CourseProvider with ChangeNotifier {
 
   Future<void> addCourse(Course course) async {
     try {
-      // Convert the course to a map including nested objects
       final courseData = course.toMap();
 
-      // Debug print to check the data before sending
       debugPrint('Saving course data: $courseData');
 
-      // Add document to Firestore
       final docRef = await _firestore.collection('courses').add(courseData);
 
-      // Debug print the document ID
       debugPrint('Course saved with ID: ${docRef.id}');
 
       await fetchCourses(); // Refresh the list
@@ -41,31 +37,7 @@ class CourseProvider with ChangeNotifier {
     }
   }
 
-  Future<void> refreshCourse(Course course) async {
-    try {
-      final doc = await FirebaseFirestore.instance
-          .collection('courses')
-          .doc(course.title)
-          .get();
 
-      if (doc.exists) {
-        final updatedCourse = Course.fromMap({
-          ...doc.data()!,
-          'trainer': doc.data()!['trainer'] ?? {},
-          'materials': doc.data()!['materials'] ?? [],
-          'quizzes': doc.data()!['quizzes'] ?? [],
-        });
-
-        final index = _courses.indexWhere((c) => c.title == course.title);
-        if (index != -1) {
-          _courses[index] = updatedCourse;
-          notifyListeners();
-        }
-      }
-    } catch (e) {
-      print('Error refreshing course: $e');
-    }
-  }
 
   Future<Course?> getCourseById(String id) async {
     try {
