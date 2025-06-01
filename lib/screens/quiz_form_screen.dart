@@ -51,6 +51,7 @@ class _QuizFormScreenState extends State<QuizFormScreen> {
       final quiz = Quiz(
         title: _quizTitleController.text.trim(),
         questions: _questions,
+        // score will default to 0
       );
       Navigator.pop(context, quiz);
     } else if (_questions.isEmpty) {
@@ -90,7 +91,8 @@ class _QuizFormScreenState extends State<QuizFormScreen> {
               ),
               const SizedBox(height: 24),
 
-              const Text('Add Question', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text('Add Question',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 12),
 
               TextFormField(
@@ -107,7 +109,8 @@ class _QuizFormScreenState extends State<QuizFormScreen> {
                   return ListTile(
                     title: TextFormField(
                       controller: _optionControllers[index],
-                      decoration: InputDecoration(labelText: 'Option ${index + 1}'),
+                      decoration:
+                          InputDecoration(labelText: 'Option ${index + 1}'),
                     ),
                     leading: Radio<int>(
                       value: index,
@@ -129,7 +132,8 @@ class _QuizFormScreenState extends State<QuizFormScreen> {
               ),
 
               const Divider(height: 32),
-              const Text('Questions Preview', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text('Questions Preview',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
 
               ..._questions.map((q) => ListTile(
                     title: Text(q.question),

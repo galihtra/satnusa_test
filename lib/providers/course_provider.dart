@@ -41,6 +41,32 @@ class CourseProvider with ChangeNotifier {
     }
   }
 
+  Future<void> refreshCourse(Course course) async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('courses')
+          .doc(course.title)
+          .get();
+
+      if (doc.exists) {
+        final updatedCourse = Course.fromMap({
+          ...doc.data()!,
+          'trainer': doc.data()!['trainer'] ?? {},
+          'materials': doc.data()!['materials'] ?? [],
+          'quizzes': doc.data()!['quizzes'] ?? [],
+        });
+
+        final index = _courses.indexWhere((c) => c.title == course.title);
+        if (index != -1) {
+          _courses[index] = updatedCourse;
+          notifyListeners();
+        }
+      }
+    } catch (e) {
+      print('Error refreshing course: $e');
+    }
+  }
+
   Future<Course?> getCourseById(String id) async {
     try {
       final doc = await _firestore.collection('courses').doc(id).get();

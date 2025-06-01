@@ -18,49 +18,54 @@ class _QuizPageState extends State<QuizPage> {
   final Map<int, int> _selectedAnswers = {};
   int _attempts = 0;
 
+  void _resetQuiz() {
+    setState(() {
+      _selectedAnswers.clear(); // Reset jawaban yang dipilih
+      _attempts++; // Tambah jumlah percobaan
+    });
+  }
+
   void _submitQuiz() async {
-  int score = 0;
+  int calculatedScore = 0;
   final totalQuestions = widget.quiz.questions.length;
 
+  // Hitung score
   for (int i = 0; i < totalQuestions; i++) {
-    final question = widget.quiz.questions[i];
-    final selectedAnswerIndex = _selectedAnswers[i];
-
-    if (selectedAnswerIndex != null) {
-      final selectedAnswerValue = question.options[selectedAnswerIndex];
-      if (selectedAnswerValue == question.correct) {
-        score += (100 ~/ totalQuestions);
+    if (_selectedAnswers[i] != null) {
+      final selectedAnswer = widget.quiz.questions[i].options[_selectedAnswers[i]!];
+      if (selectedAnswer == widget.quiz.questions[i].correct) {
+        calculatedScore += (100 ~/ totalQuestions);
       }
     }
   }
 
-  _attempts++;
+  // Buat quiz baru dengan score terupdate
+  final updatedQuiz = widget.quiz.copyWith(score: calculatedScore);
 
-  // ✅ Simpan skor ke Firestore
-  await FirebaseFirestore.instance
-      .collection('course_quiz_scores')
-      .doc(widget.quiz.title) // gunakan courseId jika kamu punya
-      .set({'score': score});
+  try {
+    // Simpan ke Firestore dengan merge
+    await FirebaseFirestore.instance
+        .collection('quizzes')
+        .doc(updatedQuiz.title)
+        .set(updatedQuiz.toMap(), SetOptions(merge: true));
 
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (_) => QuizResultPage(
-        score: score,
-        isPassed: score >= 90,
-        remainingAttempts: 2 - _attempts,
-        onRetry: _attempts < 2
-            ? () {
-                setState(() {
-                  _selectedAnswers.clear();
-                });
-              }
-            : null,
+    // Navigasi dengan membawa QUIZ BARU
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => QuizResultPage(
+          quiz: updatedQuiz, // Gunakan updatedQuiz bukan widget.quiz
+          remainingAttempts: 2 - _attempts,
+          onRetry: _attempts < 2 ? _resetQuiz : null,
+        ),
       ),
-    ),
-  );
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Gagal menyimpan score: $e')),
+    );
+  }
 }
-
 
   @override
   Widget build(BuildContext context) {

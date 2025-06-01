@@ -7,7 +7,6 @@ import '../models/quiz.dart';
 import '../models/trainer.dart';
 import '../providers/course_provider.dart';
 import '../widgets/material_form.dart';
-import '../widgets/quiz_form.dart';
 
 class CourseCreateScreen extends StatefulWidget {
   const CourseCreateScreen({Key? key}) : super(key: key);

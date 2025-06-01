@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:satnusa_test/constants/colors.dart';
 
 import '../../constants/text_style.dart';
+import '../../models/quiz.dart';
 
 class QuizResultPage extends StatelessWidget {
-  final int score;
-  final bool isPassed;
+  final Quiz quiz;
   final int remainingAttempts;
   final VoidCallback? onRetry;
 
   const QuizResultPage({
     Key? key,
-    required this.score,
-    required this.isPassed,
+    required this.quiz,
     required this.remainingAttempts,
     this.onRetry,
   }) : super(key: key);
+
+   bool get isPassed => quiz.score >= 90; 
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,7 @@ class QuizResultPage extends StatelessWidget {
                     style: AppTextStyle.label,
                   ),
                   Text(
-                    "$score",
+                    "${quiz.score}",
                     style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
